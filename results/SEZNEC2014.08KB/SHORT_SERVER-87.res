@@ -1,2 +1,2 @@
 ..............................
-............  TRACE 	 : ../traces/SHORT_SERVER-87.bt9.trace.gz  NUM_INSTRUCTIONS       	 :  209999900  NUM_CONDITIONAL_BR     	 :   42708722  NUM_MISPREDICTIONS     	 :     468253  MISPRED_PER_1K_INST    	 :     2.2298
+............  TRACE 	 : ../traces/SHORT_SERVER-87.bt9.trace.gz  NUM_INSTRUCTIONS            	 :  209999900  NUM_BR                      	 :   42708721  NUM_UNCOND_BR               	 :    7409712  NUM_CONDITIONAL_BR          	 :   35299009  NUM_MISPREDICTIONS          	 :     198811  MISPRED_PER_1K_INST         	 :     0.9467

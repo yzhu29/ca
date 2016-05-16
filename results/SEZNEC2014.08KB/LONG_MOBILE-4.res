@@ -1,1 +1,1 @@
-.............  TRACE 	 : ../traces/LONG_MOBILE-4.bt9.trace.gz  NUM_INSTRUCTIONS       	 : 1000000000  NUM_CONDITIONAL_BR     	 :   13881338  NUM_MISPREDICTIONS     	 :        902  MISPRED_PER_1K_INST    	 :     0.0009
+.............  TRACE 	 : ../traces/LONG_MOBILE-4.bt9.trace.gz  NUM_INSTRUCTIONS            	 :  999999976  NUM_BR                      	 :   13881337  NUM_UNCOND_BR               	 :      22884  NUM_CONDITIONAL_BR          	 :   13858453  NUM_MISPREDICTIONS          	 :        602  MISPRED_PER_1K_INST         	 :     0.0006
