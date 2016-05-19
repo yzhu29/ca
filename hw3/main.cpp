@@ -1,11 +1,16 @@
 #include <iostream>
 #include <bitset>
+#include <hash_map>
 using namespace std;
+
+class key{
+}
 
 int main()
 {
+    // Cache line: 64 Byte
     // L1 size: 64 KB, 2 way
-    // L1 index: 6 + 10 -1 = 15 bit
+    // L1 addr: 6 + 10 -1 = 15 bit
     double A[256][1024];
     // [256]: 8 bit, [1024]: 10 bit, double(offset is 8 byte): 3 bit, total: 8+10+3 = 21 bit
     int log8 = 3;
@@ -25,28 +30,34 @@ int main()
                 for(k = 0; k < 128; k+=4) {
 
                 a = A[i][k];
-                int indexA = k & ((1 << log1024) - 1);
-                indexA = indexA << 3; // 3 bit is the offset (a double)
-                int indexAmsb = i & ((1 << log256) - 1);
-                indexA = (indexAmsb << (10 + 3)) + indexA;
-                //cout << (indexAmsb << (10 + 3)) << endl;
-                //cout << indexA << endl;
-                //cout << std::bitset<32>((indexAmsb << (10 + 3))) <<endl;
-                //cout << std::bitset<32>(indexA) <<endl;
+                int addrA = k & ((1 << log1024) - 1);
+                addrA = addrA << 3; // 3 bit is the offset (a double)
+                int addrAmsb = i & ((1 << log256) - 1);
+                addrA = (addrAmsb << (10 + 3)) + addrA;
+                int baseA = (1 << 30);   // 0100_0000_0000_0000_0000_0000_0000_0000
+                addrA = addrA + baseA;
+                //cout << (addrAmsb << (10 + 3)) << endl;
+                //cout << addrA << endl;
+                //cout << std::bitset<32>((addrAmsb << (10 + 3))) <<endl;
+                //cout << std::bitset<32>(addrA) <<endl;
 
                 b = B[k][j];
-                int indexB = j & ((1 << log512) - 1);
-                indexB = indexB << 3; // 3 bit is the offset (a double)
-                int indexBmsb = k & ((1 << log1024) - 1);
-                indexB = (indexBmsb << (9 + 3)) + indexB;
-                //cout << std::bitset<32>(indexB) <<endl;
+                int addrB = j & ((1 << log512) - 1);
+                addrB = addrB << 3; // 3 bit is the offset (a double)
+                int addrBmsb = k & ((1 << log1024) - 1);
+                addrB = (addrBmsb << (9 + 3)) + addrB;
+                int baseB = (1 << 31); // 1000_0000_0000_0000_0000_0000_0000_0000
+                addrB = addrB + baseB;
+                //cout << std::bitset<32>(addrB) <<endl;
 
                 c = C[i][j];
-                int indexC = j & ((1 << log512) - 1);
-                indexC = indexC << 3; // 3 bit is the offset (a double)
-                int indexCmsb = i & ((1 << log256) - 1);
-                indexC = (indexCmsb << (9 + 3)) + indexC;
-                cout << std::bitset<32>(indexC) <<endl;
+                int addrC = j & ((1 << log512) - 1);
+                addrC = addrC << 3; // 3 bit is the offset (a double)
+                int addrCmsb = i & ((1 << log256) - 1);
+                addrC = (addrCmsb << (9 + 3)) + addrC;
+                int baseC = (3 << 30);   // 1100_0000_0000_0000_0000_0000_0000_0000
+                addrC = addrC + baseC;
+                cout << std::bitset<32>(addrC) <<endl;
 
                 c += a * b;
 
