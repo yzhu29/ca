@@ -1,3 +1,7 @@
 traces/*
 results/*.res
 cbp_cmpe202/traces/*
+*.swp
+*~
+cbp_cmpe202/traces_2014/*
+hw3/result

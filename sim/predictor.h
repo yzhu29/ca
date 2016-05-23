@@ -26,7 +26,8 @@
 #endif
 
 #define HYSTSHIFT 2 // bimodal hysteresis shared by 4 entries
-#define LOGB 14 // log of number of entries in bimodal predictor
+//#define LOGB 14 // log of number of entries in bimodal predictor
+#define LOGB 16
 
 
 
@@ -38,7 +39,8 @@
 #ifdef REALISTIC
 #define LOGGNB 10
 #else
-#define LOGGNB 9
+//#define LOGGNB 9
+#define LOGGNB 11
 // LOGGNB: log of number of entries in global conditional branch history GEHL predictor
 #endif
 #define GNB 4
@@ -59,13 +61,15 @@ int Lm[LNB] = {16,11,6,3};
 int8_t LGEHLA[LNB][(1 << LOGLNB)];
 int8_t *LGEHL[LNB];
 #else
-#define LOGLNB 10
+//#define LOGLNB 10
+#define LOGLNB 12
 #define LNB 3
 int Lm[LNB] = {11,6,3};
 int8_t LGEHLA[LNB][(1 << LOGLNB)];
 int8_t *LGEHL[LNB];
 #endif
-#define  LOGLOCAL 8
+//#define  LOGLOCAL 8
+#define  LOGLOCAL 10
 #define NLOCAL (1<<LOGLOCAL)
 // NLOCAL: number of local history entries
 #define INDLOCAL (PC & (NLOCAL-1))
@@ -74,18 +78,21 @@ long long L_shist[NLOCAL];
 
 
 // small local history
-#define LOGSNB 9
+//#define LOGSNB 9
+#define LOGSNB 11
 #define SNB 4
 int Sm[SNB] =  {16,11, 6, 3};
 int8_t SGEHLA[SNB][(1 << LOGSNB)];
 int8_t *SGEHL[SNB];
-#define LOGSECLOCAL 4
+//#define LOGSECLOCAL 4
+#define LOGSECLOCAL 6
 #define NSECLOCAL (1<<LOGSECLOCAL)	//Number of second local histories
 #define INDSLOCAL  (((PC ^ (PC >>5))) & (NSECLOCAL-1))
 long long S_slhist[NSECLOCAL];
 
 
-#define LOGTNB 9
+//#define LOGTNB 9
+#define LOGTNB 11
 #define TNB 3
 int Tm[TNB] =  {11, 6, 3};
 int8_t TGEHLA[TNB][(1 << LOGTNB)];
@@ -95,7 +102,8 @@ long long T_slhist[NSECLOCAL];
 
 //return-stack associated history component
 #define PNB 4
-#define LOGPNB 9
+//#define LOGPNB 9
+#define LOGPNB 11
 int Pm[PNB] ={16,11,6,3};
 int8_t PGEHLA[PNB][(1 << LOGPNB)];
 int8_t *PGEHL[PNB];
@@ -104,7 +112,8 @@ int pthstack;
 
 
 //parameters of the loop predictor
-#define LOGL 5
+//#define LOGL 5
+#define LOGL 7
 #define WIDTHNBITERLOOP 10	// we predict only loops with less than 1K iterations
 #define LOOPTAG 10		//tag width in the loop predictor
 
@@ -113,7 +122,8 @@ int pthstack;
 #ifdef REALISTIC
 #define LOGSIZEUP 0
 #else
-#define LOGSIZEUP 5
+//#define LOGSIZEUP 5
+#define LOGSIZEUP 7
 #endif
 int Pupdatethreshold[(1 << LOGSIZEUP)];	//size is fixed by LOGSIZEUP
 #define INDUPD (PC & ((1 << LOGSIZEUP) - 1))
@@ -138,7 +148,8 @@ int8_t  FirstH, SecondH, ThirdH;
 #ifdef REALISTIC
 #define LOGSIZEUSEALT 0
 #else
-#define LOGSIZEUSEALT 8
+//#define LOGSIZEUSEALT 8
+#define LOGSIZEUSEALT 10
 #endif
 #define SIZEUSEALT  (1<<(LOGSIZEUSEALT))
 #define INDUSEALT (PC & (SIZEUSEALT -1))
@@ -150,7 +161,9 @@ long long GHIST;
 
 
 //The two BIAS tables in the SC component
-#define LOGBIAS 7
+//#define LOGBIAS 7
+#define LOGBIAS 9
+
 int8_t Bias[(1<<(LOGBIAS+1))];
 #define INDBIAS (((PC<<1) + pred_inter) & ((1<<(LOGBIAS+1)) -1))
 int8_t BiasSK[(1<<(LOGBIAS+1))];

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1463892163 source:/home/yzhu29/mydata/cbp_repo/cbp_cmpe202/size_calculate/size_calculate/main.cpp
+	<iostream>
+	<math.h>
+

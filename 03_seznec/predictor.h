@@ -1,6 +1,7 @@
+#define INCLUDEPRED
 #ifdef INCLUDEPRED
 
-/* 
+/*
 Code has been succesively derived from the tagged PPM predictor simulator from Pierre Michaud, the OGEHL predictor simulator from by André Seznec, the TAGE predictor simulator from  André Seznec and Pierre Michaud
 
 */
@@ -60,7 +61,7 @@ int8_t CountStatCorThreshold;
 
 
 // utility class for index computation
-// this is the cyclic shift register for folding 
+// this is the cyclic shift register for folding
 // a long global history into a smaller number of bits; see P. Michaud's PPM-like predictor at CBP-1
 class folded_history
 {
@@ -105,7 +106,7 @@ public:
   bool dir;			// 1 bit
 
 
-  //47 bits per entry    
+  //47 bits per entry
     lentry ()
   {
     confid = 0;
@@ -133,7 +134,7 @@ public:
 
   }
 };
-class bentry			// TAGE bimodal table entry  
+class bentry			// TAGE bimodal table entry
 {
 public:
   int8_t hyst;
@@ -164,7 +165,7 @@ uint8_t ghist[HISTBUFFERLENGTH];
 int Fetch_ptghist;
 int Fetch_ptghistos;
 int Fetch_phist;		//path history
-int Fetch_phistos;		//path os history                     
+int Fetch_phistos;		//path os history
 folded_history Fetch_ch_i[NHIST + 1];	//utility for computing TAGE indices
 folded_history Fetch_ch_t[2][NHIST + 1];	//utility for computing TAGE tags
 int Retire_ptghist;
@@ -193,8 +194,8 @@ gentry *gtable[NHIST + 1];	// tagged TAGE tables
 int TB[NHIST + 1];		// tag width for the different tagged tables
 int logg[NHIST + 1];		// log of number entries of the different tagged tables
 
-int GI[NHIST + 1];		// indexes to the different tables are computed only once  
-int GTAG[NHIST + 1];		// tags for the different tables are computed only once  
+int GI[NHIST + 1];		// indexes to the different tables are computed only once
+int GTAG[NHIST + 1];		// tags for the different tables are computed only once
 int BI;				// index of the bimodal table
 
 bool pred_taken;		// prediction
@@ -290,7 +291,7 @@ public:
     logg[1] = LOGG + 1;
 	// if sharing: logg[1] = 12;
 	// if not sharing: logg[1] = logg[2] = 11
-    logg[STEP1] = LOGG + 3; 
+    logg[STEP1] = LOGG + 3;
 	// if sharing: logg[3] = 14
 	// if not sharing: logg[3] = 11, logg[4] to logg[6] = 12
     logg[STEP2] = LOGG + 2; // logg[8] = 13
@@ -600,7 +601,7 @@ public:
     if (LHIT >= 0)
       {
 	int index = (LI ^ ((LIB >> LHIT) << 2)) + LHIT;
-//already a hit 
+//already a hit
 	if (LVALID)
 	  {
 	    if (Taken != predloop)
@@ -625,7 +626,7 @@ public:
 	  {
 	    ltable[index].confid = 0;
 	    ltable[index].NbIter = 0;
-//treat like the 1st encounter of the loop 
+//treat like the 1st encounter of the loop
 	  }
 	if (Taken != ltable[index].dir)
 	  {
@@ -634,7 +635,7 @@ public:
 		if (ltable[index].confid < 7)
 		  ltable[index].confid++;
 		if (ltable[index].NbIter < 3)
-		  //just do not predict when the loop count is 1 or 2     
+		  //just do not predict when the loop count is 1 or 2
 		  {
 // free the entry
 		    ltable[index].dir = Taken;
@@ -724,7 +725,7 @@ public:
 	else
 	  alttaken = getbim ();
 	LongestMatchPred = (gtable[HitBank][GI[HitBank]].ctr >= 0);
-//if the entry is recognized as a newly allocated entry and 
+//if the entry is recognized as a newly allocated entry and
 //USE_ALT_ON_NA is positive  use the alternate prediction
 	if ((USE_ALT_ON_NA < 0)
 	    || (abs (2 * gtable[HitBank][GI[HitBank]].ctr + 1) > 1))
@@ -826,7 +827,7 @@ public:
 	    bool pred = (Sum >= 0);
 	    if (abs (Sum) >= USESTATCORTHRESHOLD)
 	      {
-		pred_taken = pred;	//Use only if very confident 
+		pred_taken = pred;	//Use only if very confident
 	      }
 	  }
 #endif
@@ -888,7 +889,7 @@ public:
 	ghist[Y & (HISTBUFFERLENGTH - 1)] = TAKEN;
 	X = (X << 1) + PATHBIT;
 	X = (X & ((1 << PHISTWIDTH) - 1));
-//prepare next index and tag computations for user branchs 
+//prepare next index and tag computations for user branchs
 	for (int i = 1; i <= NHIST; i++)
 	  {
 
@@ -961,7 +962,7 @@ public:
 	    bool pred = (Sum >= 0);
 	    if (abs (Sum) >= USESTATCORTHRESHOLD)
 	      {
-		pred_taken = pred;	//Use only if very confident 
+		pred_taken = pred;	//Use only if very confident
 	      }
 	    if (tage_pred != pred)
 	      if (abs (Sum) >= USESTATCORTHRESHOLD - 4)
@@ -1062,7 +1063,7 @@ public:
 	  if (HitBank > 0)
 	    {
 	      ctrupdate (gtable[HitBank][GI[HitBank]].ctr, taken, CWIDTH);
-// acts as a protection 
+// acts as a protection
 	      if ((gtable[HitBank][GI[HitBank]].u == 0))
 		{
 		  if (AltBank > 0)
@@ -1092,7 +1093,7 @@ public:
 
       }
 
-//  UPDATE RETIRE HISTORY  
+//  UPDATE RETIRE HISTORY
     HistoryUpdate (pc, brtype, taken, target, Retire_phist, Retire_ptghist,
 		   Retire_ch_i, Retire_ch_t[0], Retire_ch_t[1]);
   }
