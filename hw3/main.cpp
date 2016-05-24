@@ -4,6 +4,7 @@
 
 using namespace std;
 
+#define PRINT_TRACES_NUM 128
 //#define PRINT
 class Data{
 public:
@@ -31,6 +32,8 @@ unordered_multimap<int, Data> L2;
 
     int valid_cacheline1 = 0;
     int valid_cacheline2 = 0;
+
+    int print_count = 0;
 
     char array_set;
 
@@ -200,7 +203,7 @@ bool cache_access1 (char as, int index, int tag, Data d) {
     return hit;
 }
 
-void cache_access2 (int index, int tag, Data d) {
+bool cache_access2 (int index, int tag, Data d) {
     bool hit = 1;
     pair<int, Data> mypair(index, d);
                 int count = L2.count(index);
@@ -276,7 +279,16 @@ void cache_access2 (int index, int tag, Data d) {
                     cout << "Containing more than 2 cachelines" <<endl;
                     exit(1);
                 }
+    return hit;
 }
+
+#define log8  3
+#define log256  8
+#define log512  9
+#define log1024  10
+#define logindex1  9
+#define logoffset  6
+#define logindex2  12
 
 int main()
 {
@@ -287,13 +299,7 @@ int main()
     // L2 index: 8192 cache lines and 2 way = 13 - 1 = 12 bit
     double A[256][1024];
     // [256]: 8 bit, [1024]: 10 bit, double(offset is 8 byte): 3 bit, total: 8+10+3 = 21 bit
-    int log8 = 3;
-    int log256 = 8;
-    int log512 = 9;
-    int log1024 = 10;
-    int logindex1 = 9;
-    int logoffset = 6;
-    int logindex2 = 12;
+
     double B[1024][512];
     // [1024]: 10 bit, [512]: 9bit, double(offset is 8 byte): 3 bit, total: 10 + 9 +3 = 22 bit
     double C[256][512];
@@ -311,9 +317,6 @@ int main()
     long baseC = long(C);
     //cout << "baseC:\t" << bitset<64>(baseC) <<endl;
     cout << "baseC:\t" << hex << baseC << endl;
-
-
-
 
 
     for(i = 0; i < 128; i+=2) {
@@ -336,9 +339,26 @@ int main()
                 Data d1(tagA1, 0);
                 Data d2(tagA2, 0);
                 char asA = 'A';
-                bool hitA = cache_access1(asA, indexA1, tagA1, d1);
-                if(!hitA){
-                    cache_access2(indexA2, tagA2, d2);
+                bool hitA1 = cache_access1(asA, indexA1, tagA1, d1);
+                #ifdef PRINT_TRACES_NUM
+                if (print_count <= PRINT_TRACES_NUM) {
+                    if(hitA1)
+                        cout << "A[" << i << "][" << k << "] L1:\thit" <<dec << endl;
+                    else
+                        cout << "A[" << i << "][" << k << "] L1:\tmiss" << endl;
+                    print_count++;
+                    }
+                #endif
+                if(!hitA1){
+                    bool hitA2 = cache_access2(indexA2, tagA2, d2);
+                #ifdef PRINT_TRACES_NUM
+                if (print_count <= PRINT_TRACES_NUM) {
+                    if(hitA2)
+                        cout << "A[" << i << "][" << k << "] L2:\thit" << endl;
+                    else
+                        cout << "A[" << i << "][" << k << "] L2:\tmiss" << endl;
+                    }
+                #endif
                 }
 
                 //cout << count <<endl;
@@ -365,9 +385,26 @@ int main()
                 Data db1(tagB1, 0);
                 Data db2(tagB2, 0);
                 char asB = 'B';
-                bool hitB = cache_access1(asB, indexB1, tagB1, db1);
-                if(!hitB){
-                    cache_access2(indexB2, tagB2, db2);
+                bool hitB1 = cache_access1(asB, indexB1, tagB1, db1);
+                #ifdef PRINT_TRACES_NUM
+                if (print_count <= PRINT_TRACES_NUM) {
+                    if(hitB1)
+                        cout << "B[" << k << "][" << j << "] L1:\thit" << endl;
+                    else
+                        cout << "B[" << k << "][" << j << "] L1:\tmiss" << endl;
+                    print_count++;
+                    }
+                #endif
+                if(!hitB1){
+                    bool hitB2 = cache_access2(indexB2, tagB2, db2);
+                #ifdef PRINT_TRACES_NUM
+                if (print_count <= PRINT_TRACES_NUM) {
+                    if(hitB2)
+                        cout << "B[" << k << "][" << j << "] L2:\thit" << endl;
+                    else
+                        cout << "B[" << k << "][" << j << "] L2:\tmiss" << endl;
+                    }
+                #endif
                 }
                 //cout << std::bitset<32>(tagB1) <<endl;
 
@@ -387,9 +424,27 @@ int main()
                 Data dc1(tagC1, 0);
                 Data dc2(tagC2, 0);
                 char asC = 'C';
-                bool hitC = cache_access1(asC, indexC1, tagC1, dc1);
-                if (!hitC){
-                    cache_access2(indexC2, tagC2, dc2);
+                bool hitC1 = cache_access1(asC, indexC1, tagC1, dc1);
+                #ifdef PRINT_TRACES_NUM
+                if (print_count <= PRINT_TRACES_NUM) {
+                    if(hitC1)
+                        cout << "C[" << i << "][" << j << "] L1:\thit" << endl;
+                    else
+                        cout << "C[" << i << "][" << j << "] L1:\tmiss" << endl;
+                    print_count++;
+                    }
+                #endif
+                if (!hitC1){
+                    bool hitC2 = cache_access2(indexC2, tagC2, dc2);
+                    #ifdef PRINT_TRACES_NUM
+                    if (print_count <= PRINT_TRACES_NUM) {
+                        if(hitC2)
+                            cout << "C[" << i << "][" << j << "] L2:\thit" << endl;
+                        else
+                            cout << "C[" << i << "][" << j << "] L2:\tmiss" << endl;
+                        print_count++;
+                        }
+                    #endif
                 }
                 //cout << std::bitset<32>(indexC1) <<endl;
                 //cout << std::bitset<32>(tagC1) <<endl;
@@ -397,9 +452,9 @@ int main()
                 c += a * b;
 
                 C[i][j] = c;
-                hitC = cache_access1(asC, indexC1, tagC1, dc1);
-                if (!hitC){
-                    cache_access2(indexC2, tagC2, dc2);
+                hitC1 = cache_access1(asC, indexC1, tagC1, dc1);
+                if (!hitC1){
+                    bool hitC2 = cache_access2(indexC2, tagC2, dc2);
                 }
                 }
           }
