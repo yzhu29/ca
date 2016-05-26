@@ -412,18 +412,39 @@ fprintf (stderr, " (SC %d) ", inter);
 class PREDICTOR
 {
 public:
-  PREDICTOR (void)
+  PREDICTOR (int h1l, int h2l, int h3l, int h4l, int h5l,
+			int h6l, int h7l, int h8l, int h9l, int h10l,
+			int h11l, int h12l, int h13l, int h14l, int h15l)
   {
 
-    reinit ();
+    reinit (h1l, h2l, h3l, h4l, h5l,
+			h6l, h7l, h8l, h9l, h10l,
+			h11l, h12l, h13l, h14l, h15l);
 #ifdef PRINTSIZE
     predictorsize ();
 #endif
   }
 
 
-  void reinit ()
+  void reinit (int h1l, int h2l, int h3l, int h4l, int h5l,
+			int h6l, int h7l, int h8l, int h9l, int h10l,
+			int h11l, int h12l, int h13l, int h14l, int h15l)
   {
+	m[1] = h1l;
+	m[2] = h2l;
+	m[3] = h3l;
+	m[4] = h4l;
+	m[5] = h5l;
+	m[6] = h6l;
+	m[7] = h7l;
+	m[8] = h8l;
+	m[9] = h9l;
+	m[10] = h10l;
+	m[11] = h11l;
+	m[12] = h12l;
+	m[13] = h13l;
+	m[14] = h14l;
+	m[15]  = h15l;
 
 #ifdef LOOPPREDICTOR
     ltable = new lentry[1 << (LOGL)];

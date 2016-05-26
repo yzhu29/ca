@@ -41,7 +41,7 @@ void CheckHeartBeat(UINT64 numIter)
 
 int main(int argc, char* argv[]){
   
-  if (argc != 2) {
+  if (argc != 17) {
     printf("usage: %s <trace>\n", argv[0]);
     exit(-1);
   }
@@ -49,8 +49,13 @@ int main(int argc, char* argv[]){
   ///////////////////////////////////////////////
   // Init variables
   ///////////////////////////////////////////////
-    
-    PREDICTOR  *brpred = new PREDICTOR();  // this instantiates the predictor code
+    int argv_int[17];
+	for(int i = 2; i <= 16; i++){
+		argv_int[i] = atoi(argv[i]);
+	}
+    PREDICTOR  *brpred = new PREDICTOR(argv_int[2], argv_int[3], argv_int[4], argv_int[5],
+					argv_int[6],argv_int[7],argv_int[8],argv_int[9],argv_int[10],argv_int[11],argv_int[12],
+					argv_int[13],argv_int[14],argv_int[15],argv_int[16]);  // this instantiates the predictor code
   ///////////////////////////////////////////////
   // read each trace recrod, simulate until done
   ///////////////////////////////////////////////

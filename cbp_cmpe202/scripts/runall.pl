@@ -17,6 +17,22 @@ $sim_exe   = "../sim/predictor";
 $dest_dir  = "../results/MYRESULTS";
 $debug     = 1;
 $firewidth = 8; 
+$h1 = 0;
+$h2 = 0;
+$h3 = 0;
+$h4 = 0;
+$h5 = 0;
+$h6 = 0;
+$h7 = 0;
+$h8 = 0;
+$h9 = 0;
+$h10 = 0;
+$h11 = 0;
+$h12 = 0;
+$h13 = 0;
+$h14 = 0;
+$h15 = 0;
+
 
 #####################################
 ######### USAGE OPTIONS      ########
@@ -55,7 +71,23 @@ while (@ARGV) {
         $dest_dir = shift;
     }elsif ($option eq "-f") {
         $firewidth = shift;
-    }else{
+	}elsif ($option eq "-randomize"){
+		$h1 = shift;
+		$h2 = shift;
+		$h3 = shift;
+		$h4 = shift;
+		$h5 = shift;
+		$h6 = shift;
+		$h7 = shift;
+		$h8 = shift;
+		$h9 = shift;
+		$h10 = shift;
+		$h11 = shift;
+		$h12 = shift;
+		$h13 = shift;
+		$h14 = shift;
+		$h15 = shift;
+	}else{
 	usage();
         die "Incorrect option ... Quitting\n";
     }
@@ -84,7 +116,7 @@ $num_w = scalar @workload_list;
 unless($debug){
     mkdir "$dest_dir";
     system ("ls $dest_dir");
-#    system ("cp $sim_exe $mysim");
+	system ("cp $sim_exe $mysim");
     system ("chmod +x $mysim");
 }
 
@@ -111,7 +143,8 @@ for($ii=0; $ii< $num_w; $ii++){
     $bmkname   = $workload_list[$ii];
     $outfile = $dest_dir. "/" . $bmkname . ".res";
     $infile  = $trace_dir.$bmkname.$filetype;
-    $exe = "$mysim $infile > $outfile ";
+	#print "$h1 $h2 $h3 $h4 $h5 $h6 $h7 $h8 $h9 $h10 $h11 $h12 $h13 $h14 $h15 \n";
+	$exe = "$mysim $infile $h1 $h2 $h3 $h4 $h5 $h6 $h7 $h8 $h9 $h10 $h11 $h12 $h13 $h14 $h15 > $outfile ";
 
     while ($numChildren >= $MAX_PROCESSES) {  # limit forked children to <= $processes
       my $deadKid = wait();
